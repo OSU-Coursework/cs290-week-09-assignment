@@ -3,13 +3,7 @@ let express = require('express');
 let app = express();
 
 // set up mysql
-let mysql = require('mysql');
-let pool = mysql.createPool({
-    host            : 'localhost',
-    user            : 'student',
-    password        : 'default',
-    database        : 'student'
-});
+let mysql = require('./dbcon.js');
 
 // initialize dependencies
 let handlebars = require('express-handlebars').create({defaultLayout:'main'});
@@ -40,6 +34,49 @@ app.get('/reset-table',function(req,res,next){
     });
   });
 });
+
+// some form of this will probably be used to put data into the database
+app.get('/insert',function(req,res,next){
+  var context = {};
+  mysql.pool.query("INSERT INTO todo (`name`) VALUES (?)", [req.query.c], function(err, result){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = "Inserted id " + result.insertId;
+    res.render('home',context);
+  });
+});
+
+// some form of this will probably be used to loop through and select the data to display
+app.get('/',function(req,res,next){
+  var context = {};
+  mysql.pool.query('SELECT * FROM todo', function(err, rows, fields){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = JSON.stringify(rows);
+    res.render('home', context);
+  });
+});
+
+// some form of this will probably be used with the edit button to change a row
+app.get('/simple-update',function(req,res,next){
+  var context = {};
+  mysql.pool.query("UPDATE todo SET name=?, done=?, due=? WHERE id=? ",
+    [req.query.name, req.query.done, req.query.due, req.query.id],
+    function(err, result){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = "Updated " + result.changedRows + " rows.";
+    res.render('home',context);
+  });
+});
+
+// will have to write a delete too to have the data removed
 
 // error handling
 app.use(function(req,res){
