@@ -1,0 +1,48 @@
+<form>
+  <fieldset>
+    <legend>Add data to table</legend>
+    <input type="text" name="name" id="name">
+    <input type="number" name="reps" id="reps">
+    <input type="number" name="weight" id="weight">
+    <input type="date" name="date" id="date">
+    <input type="text" name="unit" id="unit">
+    <input type="submit" id="dataSubmit">
+  </fieldset>
+</form>
+
+<fieldset>
+  <legend>Exercise Data</legend>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Reps</th>
+        <th>Weight</th>
+        <th>Date</th>
+        <th>Unit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Squat</td>
+        <td>500</td>
+        <td>450</td>
+        <td>03-08-2019</td>
+        <td>Lbs</td>
+        <input type="submit" value="Edit">
+        <input type="submit" value="Delete">
+      </tr>
+      {{#each data}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.reps}}</td>
+        <td>{{this.weight}}</td>
+        <td>{{this.date}}</td>
+        <td>{{this.unit}}</td>
+        <input type="subit" value="Edit">
+        <input type="subit" value="Delete">
+      </tr>
+      {{/each}}
+    </tbody>
+</table>
+</fieldset>
