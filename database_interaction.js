@@ -16,11 +16,11 @@ app.use(bodyParser.json());
 // set up templating system for displaying content
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 3000);
+app.set('port', 5485);
 
 app.get('/reset-table',function(req,res,next){
   let context = {};
-  mysql.query("DROP TABLE IF EXISTS workouts", function(err){
+  mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){
     let createString = "CREATE TABLE workouts("+
     "id INT PRIMARY KEY AUTO_INCREMENT,"+
     "name VARCHAR(255) NOT NULL,"+
@@ -28,7 +28,7 @@ app.get('/reset-table',function(req,res,next){
     "weight INT,"+
     "date DATE,"+
     "lbs BOOLEAN)";
-    mysql.query(createString, function(err){
+    mysql.pool.query(createString, function(err){
       context.results = "Table reset";
       res.render('home',context);
     });
@@ -38,7 +38,7 @@ app.get('/reset-table',function(req,res,next){
 // some form of this will probably be used to put data into the database
 app.get('/insert',function(req,res,next){
   var context = {};
-  mysql.pool.query("INSERT INTO todo (`name`) VALUES (?)", [req.query.c], function(err, result){
+  mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?)", [req.query.c], function(err, result){
     if(err){
       next(err);
       return;
@@ -51,21 +51,22 @@ app.get('/insert',function(req,res,next){
 // some form of this will probably be used to loop through and select the data to display
 app.get('/',function(req,res,next){
   var context = {};
-  mysql.pool.query('SELECT * FROM todo', function(err, rows, fields){
+  mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
     if(err){
       next(err);
       return;
     }
     context.results = JSON.stringify(rows);
+    console.log(context);	
     res.render('home', context);
   });
 });
 
 // some form of this will probably be used with the edit button to change a row
-app.get('/simple-update',function(req,res,next){
+app.get('/simple-update',function(req,res,next){   
   var context = {};
-  mysql.pool.query("UPDATE todo SET name=?, done=?, due=? WHERE id=? ",
-    [req.query.name, req.query.done, req.query.due, req.query.id],
+  mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ",
+    [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs, req.query.id],
     function(err, result){
     if(err){
       next(err);
@@ -77,6 +78,18 @@ app.get('/simple-update',function(req,res,next){
 });
 
 // will have to write a delete too to have the data removed
+app.get('/delete',function(req,res,next){
+  let context = {};
+  mysql.pool.query("DELETE FROM workouts WHERE id=?", [req.query.id],
+    function(err, result){
+    if (err){
+      next(err);
+      return;
+    }
+    context.results = "Deleted " + result.changedRows + " rows.";
+    res.render('home',context); 
+  }
+}
 
 // error handling
 app.use(function(req,res){
