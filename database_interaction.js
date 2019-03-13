@@ -2,6 +2,10 @@
 let express = require('express');
 let app = express();
 
+let path = require('path');
+let dir = path.join(__dirname, 'public/');
+app.use(express.static(dir));
+
 // set up mysql
 let mysql = require('./dbcon.js');
 
