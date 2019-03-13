@@ -36,7 +36,7 @@ app.get('/reset-table',function(req,res,next){
 });
 
 // some form of this will probably be used to put data into the database
-app.get('/insert',function(req,res,next){
+app.post('/insert',function(req,res,next){
   var context = {};
   mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?)", [req.query.c], function(err, result){
     if(err){
@@ -88,8 +88,8 @@ app.get('/delete',function(req,res,next){
     }
     context.results = "Deleted " + result.changedRows + " rows.";
     res.render('home',context); 
-  }
-}
+    });
+});
 
 // error handling
 app.use(function(req,res){
