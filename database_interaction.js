@@ -88,7 +88,7 @@ app.get('/delete',function(req,res,next){
     }
     context.results = "Deleted " + result.changedRows + " rows.";
     res.render('home',context); 
-    });
+  });
 });
 
 // error handling
