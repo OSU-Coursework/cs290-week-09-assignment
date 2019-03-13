@@ -18,7 +18,14 @@ $(document).ready(() => {
             url: 'insert/',
             type: 'POST',
             dataType: 'json',
-            success: ()=> {
+	    data: {
+                name: $('#name').val(),
+                reps: $('#reps').val(),
+                weight: $('#weight').val(),
+                date: $('#date').val(),
+                lbs: $('#lbs').val()
+            },
+            success: (data)=> {
                 console.log('successfully recorded the following:', data);
             }
         });

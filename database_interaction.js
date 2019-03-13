@@ -42,7 +42,7 @@ app.get('/reset-table',function(req,res,next){
 // some form of this will probably be used to put data into the database
 app.post('/insert',function(req,res,next){
   var context = {};
-  mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?)", [req.query.c], function(err, result){
+  mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result){
     if(err){
       next(err);
       return;
