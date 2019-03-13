@@ -39,8 +39,8 @@
         <td>{{this.weight}}</td>
         <td>{{this.date}}</td>
         <td>{{this.unit}}</td>
-        <td><input type="submit" value="Edit" id="edit"></td>
-        <td><input type="submit" value="Delete" id="delete"></td>
+        <td><input type="submit" value="Edit" id="edit" dbId="{{this.id}}"></td>
+        <td><input type="submit" value="Delete" id="delete" dbId="{{this.id}}"></td>
       </tr>
       {{/each}}
     </tbody>
