@@ -1,3 +1,4 @@
+// main home page
 $(document).ready(() => {
         
     $.ajax({
@@ -11,6 +12,7 @@ $(document).ready(() => {
 
 });
 
+// ajas post for inserting data
 $(document).ready(() => {
     $('#dataSubmit').click(() =>{
     
@@ -33,6 +35,7 @@ $(document).ready(() => {
     });
 });
 
+// ajax post request for editing data
 $(document).ready(() => {
     $('#dataEdit').click(() =>{
     
@@ -56,6 +59,7 @@ $(document).ready(() => {
     });
 });
 
+// ajax get request for deleting data (should probably be a post but it's okay)
 $(document).ready(() => {
     $('#delete').click(() =>{
         itemid = $(this).attr('dbId'); 

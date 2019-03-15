@@ -22,6 +22,8 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', 5486);
 
+// this route is called manually (by typing it into the url)
+// i don't think this conflicts with any project requirements
 app.get('/reset-table',function(req,res,next){
   let context = {};
   mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){
@@ -39,7 +41,7 @@ app.get('/reset-table',function(req,res,next){
   });
 });
 
-// some form of this will probably be used to put data into the database
+// called via jquery ajax request
 app.post('/insert',function(req,res,next){
   context = {};
   mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result){
@@ -52,7 +54,7 @@ app.post('/insert',function(req,res,next){
   });
 });
 
-// some form of this will probably be used to loop through and select the data to display
+// main home page
 app.get('/',function(req,res,next){
   var context = {};
   mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
@@ -71,7 +73,8 @@ app.get('/update',function(req,res,next){
     res.render('edit',context);
 });
 
-// some form of this will probably be used with the edit button to change a row
+// i know that there is a better way to do this then repeating the same code used
+// to build the homepage, i just don't have time to look into right now!
 app.post('/simple-update',function(req,res,next){   
   var context = {};
   mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ",
@@ -92,7 +95,7 @@ app.post('/simple-update',function(req,res,next){
   });
 });
 
-// will have to write a delete too to have the data removed
+// same as above, this is not good, but it works (kinda)!
 app.get('/delete',function(req,res,next){
   let context = {};
   mysql.pool.query("DELETE FROM workouts WHERE id=?", [req.query.id],

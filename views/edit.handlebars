@@ -1,3 +1,6 @@
+<!-- this form calls simpl-update directly since it loads another page
+     it just doesn't seem to need to be an ajax call here -->
+     
 <form action="/simple-update" method="POST">
   <fieldset>
     <legend>Edit data in table</legend>
@@ -11,6 +14,9 @@
   </fieldset>
 </form>
 
+<!-- this script pulls the id variable corresponding to the database from
+     the html that redirects to this page. it's hacky but it works -->
+     
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const myParam = urlParams.get('id');
