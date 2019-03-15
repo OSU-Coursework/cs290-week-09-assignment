@@ -1,0 +1,18 @@
+<form action="/simple-update" method="POST">
+  <fieldset>
+    <legend>Edit data in table</legend>
+    <input type="text" name="name" id="name">
+    <input type="number" name="reps" id="reps">
+    <input type="number" name="weight" id="weight">
+    <input type="date" name="date" id="date">
+    <input type="checkbox" name="lbs" id="lbs">
+    <input type="hidden" name="id" id="id" value="">
+    <button>Submit</button>
+  </fieldset>
+</form>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const myParam = urlParams.get('id');
+  document.getElementById("id").setAttribute("value", myParam);
+</script>

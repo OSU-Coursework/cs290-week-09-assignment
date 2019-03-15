@@ -34,14 +34,22 @@ $(document).ready(() => {
 });
 
 $(document).ready(() => {
-    $('#edit').click(() =>{
-
+    $('#dataEdit').click(() =>{
+    
         $.ajax({
             url: 'simple-update/',
-            type: 'get',
+            type: 'POST',
             dataType: 'json',
-            success: ()=> {
-                console.log('successfully edited data:', data);
+	    data: {
+                name: $('#name').val(),
+                reps: $('#reps').val(),
+                weight: $('#weight').val(),
+                date: $('#date').val(),
+                lbs: $('#lbs').val(),
+                id: $('#id').val()
+            },
+            success: (data)=> {
+                console.log('successfully recorded the following:', data);
             }
         });
 
@@ -50,11 +58,14 @@ $(document).ready(() => {
 
 $(document).ready(() => {
     $('#delete').click(() =>{
-        
+        itemid = $(this).attr('dbId'); 
         $.ajax({
-            url: 'delete/',
+            url: 'delete?id=' + itemid,
             type: 'GET',
             dataType: 'json',
+            //data: {
+            //    id: $('#dbid').val()
+            //},
             success: ()=> {
                 console.log('successfully deleted entry:', data);
             }

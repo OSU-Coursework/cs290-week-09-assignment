@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 // set up templating system for displaying content
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 5485);
+app.set('port', 5486);
 
 app.get('/reset-table',function(req,res,next){
   let context = {};
@@ -66,32 +66,50 @@ app.get('/',function(req,res,next){
   });
 });
 
+app.get('/update',function(req,res,next){
+    var context = {};   
+    res.render('edit',context);
+});
+
 // some form of this will probably be used with the edit button to change a row
-app.get('/simple-update',function(req,res,next){   
+app.post('/simple-update',function(req,res,next){   
   var context = {};
   mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ",
-    [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs, req.query.id],
+    [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs, req.body.id],
     function(err, result){
     if(err){
       next(err);
       return;
     }
-    context.results = "Updated " + result.changedRows + " rows.";
-    res.render('home',context);
+  });
+  mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = JSON.stringify(rows);
+    res.render('home', {data: rows}); 
   });
 });
 
 // will have to write a delete too to have the data removed
-app.post('/delete',function(req,res,next){
+app.get('/delete',function(req,res,next){
   let context = {};
-  mysql.pool.query("DELETE FROM workouts WHERE id=?", [req.body.id],
+  mysql.pool.query("DELETE FROM workouts WHERE id=?", [req.query.id],
     function(err, result){
     if (err){
       next(err);
       return;
     }
-    context.results = "Deleted " + result.changedRows + " rows.";
-    res.render('home',context); 
+  });
+  mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = JSON.stringify(rows);
+    console.log(context.results);	
+    res.render('home', {data: rows}); 
   });
 });
 

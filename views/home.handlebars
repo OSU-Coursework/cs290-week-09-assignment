@@ -23,14 +23,6 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Squat</td>
-        <td>500</td>
-        <td>450</td>
-        <td>03-08-2019</td>
-        <td>Lbs</td>
-        <input type="submit" value="Edit">
-        <input type="submit" value="Delete">
       </tr>
       {{#each data}}
       <tr>
@@ -39,8 +31,18 @@
         <td>{{this.weight}}</td>
         <td>{{this.date}}</td>
         <td>{{this.unit}}</td>
-        <td><input type="submit" value="Edit" id="edit" dbId="{{this.id}}"></td>
-        <td><input type="submit" value="Delete" id="delete" dbId="{{this.id}}"></td>
+        <td>
+          <form action="/update" method="GET">
+            <input type="hidden" name="id" value="{{this.id}}">
+            <button>Update</button>
+          </form>
+        </td>
+        <td>
+          <form action="/delete" method="GET">
+            <input type="hidden" name="id" value="{{this.id}}">
+            <button>Delete</button>
+          </form>
+        </td>
       </tr>
       {{/each}}
     </tbody>
